@@ -79,27 +79,28 @@ Material:
     - _BrightnessBoundsUpper: 0.9
     - _BrightnessMin: 0.1
     - _BumpScale: 1
-    - _Contrast: 1
+    - _Contrast: 0.43
     - _Cutoff: 0.5
-    - _Density: 3.37
+    - _Density: 1.24
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _InputExposure: 2.31
+    - _InputExposure: 1.61
     - _InputOffset: 0.24
     - _Metallic: 0
     - _Mode: 0
+    - _NoiseSmoothing: 0.063
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Scale: 6.5
-    - _SizeVariability: 0.1
+    - _Scale: 5.94
+    - _SizeVariability: 0.355
     - _SmoothnessTextureChannel: 0
     - _Softness: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _StretchSmoothness: 1
+    - _StretchSmoothness: 0.73
     - _UVSec: 0
     - _ZResolution: 64
     - _ZWrite: 1

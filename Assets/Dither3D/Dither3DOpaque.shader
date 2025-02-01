@@ -27,11 +27,14 @@ Shader "Dither 3D/Opaque"
         _NoiseTex ("Noise 3D Texture", 3D) = "white" {}
 
         _Density ("Pattern density", Range(0.01,5)) = 1.0
-        
+
         _Scale ("Dot Scale", Range(2,10)) = 5.0
         _SizeVariability ("Dot Size Variability", Range(0,1)) = 0
         _Contrast ("Dot Contrast", Range(0,2)) = 1
         _StretchSmoothness ("Stretch Smoothness", Range(0,2)) = 1
+
+        _NoiseSmoothing ("Noise Smoothing", Range(0,1.0)) = 0.05
+
     }
     SubShader
     {
@@ -73,8 +76,9 @@ Shader "Dither 3D/Opaque"
         half _Metallic;
         fixed4 _Color;
         fixed4 _EmissionColor;
-        
+
         half _Density;
+        half _NoiseSmoothing;
 
         void vert(inout appdata_full v, out Input o)
         {
@@ -136,9 +140,20 @@ Shader "Dither 3D/Opaque"
 
             brightness = pow(brightness, _InputExposure) + _InputOffset;
 
-            float n = (n1 * (1.0 - frac) + n2 * frac) < brightness ? 1 : 0;
+            float noiseVal = (n1 * (1.0 - frac) + n2 * frac);
 
-            return float4(_Color.xyz * n, _Color.a);
+            float cMult = 0;
+
+            if (noiseVal < brightness)
+            {
+                cMult = 1;
+            }
+            else if (noiseVal < brightness + _NoiseSmoothing)
+            {
+                cMult = smoothstep(1, 0, (noiseVal - brightness) / _NoiseSmoothing);
+            }
+
+            return float4(_Color.xyz * cMult, _Color.a);
         }
 
         //https://www.chilliant.com/rgb2hsv.html
