@@ -35,6 +35,12 @@ public class Dither3DTextureMaker : MonoBehaviour
     {
         CreateDither3DTexture(3);
     }
+    
+    [MenuItem("Assets/Create/Noise 3D Texture/16x16")]
+    static void Create3DNoise16x16()
+    {
+        Create3DNoiseTex(16);
+    }
 
     static void CreateDither3DTexture(int recursion)
     {
@@ -168,6 +174,37 @@ public class Dither3DTextureMaker : MonoBehaviour
         // (Some versions of Unity can supposedly also create
         // a 3D texture from this via the import settings.)
         Texture2D tex = new Texture2D(size, size * layers, TextureFormat.ARGB32, false);
+        tex.wrapMode = TextureWrapMode.Repeat;
+        tex.SetPixels(colors);
+        tex.Apply();
+        byte[] bytes = tex.EncodeToPNG();
+        System.IO.File.WriteAllBytes("Assets/Dither3D/" + name + ".png", bytes);
+    }
+    
+    
+    private static void Create3DNoiseTex(int size)
+    {
+        // Configure the texture.
+        Texture3D texture = new Texture3D(size, size, size, TextureFormat.RGB24, false);
+        texture.wrapMode = TextureWrapMode.Repeat;
+        // Create a 3-dimensional array to store color data
+        Color[] colors = new Color[size * size * size];
+
+        for (int i = 0; i < colors.Length; i++)
+        {
+            colors[i] = new Color(Random.value, Random.value, Random.value);
+        }
+        
+        // Create 3D texture.
+        texture.SetPixels(colors);
+        texture.Apply();
+        string name = "Noise3D_" + size + "x" + size;
+        AssetDatabase.CreateAsset(texture, "Assets/Dither3D/" + name + ".asset");
+
+        // Create 2D texture for inspection and debugging.
+        // (Some versions of Unity can supposedly also create
+        // a 3D texture from this via the import settings.)
+        Texture2D tex = new Texture2D(size, size * size, TextureFormat.RGB24, false);
         tex.wrapMode = TextureWrapMode.Repeat;
         tex.SetPixels(colors);
         tex.Apply();
